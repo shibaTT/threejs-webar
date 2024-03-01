@@ -3,11 +3,11 @@ const renderer = new THREE.WebGLRenderer({
     antialias: true,
     alpha: true,
 });
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera();
 const scene = new THREE.Scene();
 const markerGroup = new THREE.Group();
 const arToolkitContext = new THREEx.ArToolkitContext({
-    cameraParametersUrl: "../data/camera.dat",
+    cameraParametersUrl: "./data/camera.dat",
     detectionMode: "mono",
 });
 const arToolkitSource = new THREEx.ArToolkitSource({
@@ -15,7 +15,7 @@ const arToolkitSource = new THREEx.ArToolkitSource({
 });
 const arMarkerControl = new THREEx.ArMarkerControls(arToolkitContext, markerGroup, {
     type: "pattern",
-    patternUrl: "../data/hiro.patt",
+    patternUrl: "./data/hiro.patt",
 });
 
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -52,5 +52,10 @@ markerGroup.add(cube);
 renderer.setAnimationLoop(() => {
     cube.rotation.x += 0.01;
     cube.rotation.y += 0.01;
+
+    if (arToolkitSource.ready) {
+        arToolkitContext.update(arToolkitSource.domElement);
+    }
+
     renderer.render(scene, camera);
 });
