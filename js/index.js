@@ -9,19 +9,6 @@ const arCtx = THREEx.ArToolkitContext({
 const arSource = THREEx.ArToolkitSource({
     sourceType: "webcam",
 });
-const arMarker = new THREEx.ArMarkerControls(arCtx, markerGroup, {
-    type: "pattern",
-    patternUrl: "../data/pattern-hiro.patt",
-});
-
-renderer.setSize(window.innerWidth, window.innerHeight);
-
-window.addEventListener("resize", () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-});
-
 arCtx.init(() => {
     camera.projectionMatrix.copy(arCtx.getProjectionMatrix());
 });
@@ -33,6 +20,18 @@ arSource.init(() => {
     if (arCtx.arController) {
         arSource.copyElementSizeTo(arCtx.arController.canvas);
     }
+});
+const arMarker = new THREEx.ArMarkerControls(arCtx, markerGroup, {
+    type: "pattern",
+    patternUrl: "../data/pattern-hiro.patt",
+});
+
+renderer.setSize(window.innerWidth, window.innerHeight);
+
+window.addEventListener("resize", () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
 scene.add(markerGroup);
