@@ -1,16 +1,20 @@
+const windowSize = {
+    width: 640,
+    height: 480,
+};
 const renderer = new THREE.WebGLRenderer({
     canvas: document.querySelector("canvas"),
     antialias: true,
     alpha: true,
 });
-const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 30);
+const camera = new THREE.PerspectiveCamera(45, windowSize.width / windowSize.height, 0.1, 175);
 const scene = new THREE.Scene();
 const markerGroup = new THREE.Group();
 const arToolkitContext = new THREEx.ArToolkitContext({
     cameraParametersUrl: "./data/camera.dat",
     detectionMode: "mono",
     debug: true,
-    maxDetectionRate: 10,
+    maxDetectionRate: 60,
 });
 const arToolkitSource = new THREEx.ArToolkitSource({
     sourceType: "webcam",
@@ -20,7 +24,7 @@ const arMarkerControl = new THREEx.ArMarkerControls(arToolkitContext, markerGrou
     patternUrl: "../data/hiro.patt",
 });
 
-renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setSize(windowSize.width, windowSize.height);
 
 window.addEventListener("resize", () => {
     onResize();
