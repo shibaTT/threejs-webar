@@ -13,7 +13,7 @@ const markerGroup = new THREE.Group();
 const arToolkitContext = new THREEx.ArToolkitContext({
     cameraParametersUrl: "./data/camera.dat",
     detectionMode: "mono",
-    debug: true,
+    debug: false,
     maxDetectionRate: 60,
 });
 const arToolkitSource = new THREEx.ArToolkitSource({
@@ -66,3 +66,26 @@ function onResize() {
         arToolkitSource.copyElementSizeTo(arToolkitContext.arController.canvas);
     }
 }
+
+///////////////////////////////////////////////////////////////////
+// Button Function
+const button = document.querySelector(".screenshot");
+
+button.addEventListener("click", () => {
+    // const canvas = document.querySelector("canvas");
+    // const video = document.querySelector("video");
+
+    // const data = renderer.domElement.toDataURL("image/png");
+    // const a = document.createElement("a");
+    // a.href = data;
+    // a.download = "screenshot.png";
+    // a.click();
+
+    html2canvas(document.querySelector("main")).then((canvas) => {
+        const data = canvas.toDataURL("image/png");
+        const a = document.createElement("a");
+        a.href = data;
+        a.download = "screenshot.png";
+        a.click();
+    });
+});
