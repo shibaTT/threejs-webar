@@ -9,7 +9,7 @@ const arToolkitContext = THREEx.ArToolkitContext({
 const arToolkitSource = THREEx.ArToolkitSource({
     sourceType: "webcam",
 });
-const arMarkerControls = new THREEx.ArMarkerControls(arToolkitContext, markerRoot, {
+const arMarkerControl = new THREEx.ArMarkerControls(arToolkitContext, markerRoot, {
     type: "pattern",
     patternUrl: "../data/pattern-hiro.patt",
 });
