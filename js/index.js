@@ -3,27 +3,27 @@ const renderer = new THREE.WebGLRenderer({
     antialias: true,
     alpha: true,
 });
-const camera = new THREE.PerspectiveCamera();
+const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 30);
 const scene = new THREE.Scene();
 const markerGroup = new THREE.Group();
 const arToolkitContext = new THREEx.ArToolkitContext({
     cameraParametersUrl: "./data/camera.dat",
     detectionMode: "mono",
+    debug: true,
+    maxDetectionRate: 10,
 });
 const arToolkitSource = new THREEx.ArToolkitSource({
     sourceType: "webcam",
 });
 const arMarkerControl = new THREEx.ArMarkerControls(arToolkitContext, markerGroup, {
     type: "pattern",
-    patternUrl: "./data/hiro.patt",
+    patternUrl: "../data/hiro.patt",
 });
 
 renderer.setSize(window.innerWidth, window.innerHeight);
 
 window.addEventListener("resize", () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    onResize();
 });
 
 arToolkitContext.init(() => {
@@ -31,19 +31,14 @@ arToolkitContext.init(() => {
 });
 arToolkitSource.init(() => {
     document.querySelector("main").appendChild(arToolkitSource.domElement);
-    arToolkitSource.onResizeElement();
-    arToolkitSource.copyElementSizeTo(renderer.domElement);
-    if (arToolkitContext.arController) {
-        arToolkitSource.copyElementSizeTo(arToolkitContext.arController.canvas);
-    }
+    setTimeout(() => {
+        onResize();
+    }, 2000);
 });
 
 scene.add(markerGroup);
 
-const cube = new THREE.Mesh(
-    new THREE.BoxGeometry(1, 1, 1),
-    new THREE.MeshBasicMaterial({ color: 0xff0000 })
-);
+const cube = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshNormalMaterial());
 
 cube.position.set(0, 0.5, 0);
 
@@ -59,3 +54,11 @@ renderer.setAnimationLoop(() => {
 
     renderer.render(scene, camera);
 });
+
+function onResize() {
+    arToolkitSource.onResizeElement();
+    arToolkitSource.copyElementSizeTo(renderer.domElement);
+    if (arToolkitContext.arController) {
+        arToolkitSource.copyElementSizeTo(arToolkitContext.arController.canvas);
+    }
+}
